@@ -26,6 +26,7 @@ def home(request):
 class topic_list(ListView):
     model = Message
 
+
 def publish(request):
     """Renders the about page."""
     if request.method == "POST":
