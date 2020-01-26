@@ -12,6 +12,7 @@ from django.http import HttpResponseRedirect
 from app.models import Message
 from django.views.generic import ListView
 import paho.mqtt.client as mqtt
+import time
 
 def home(request):
     """Renders the home page."""
@@ -22,6 +23,7 @@ def home(request):
         {
             'title':'Home Page',
             'year':datetime.now().year,
+            'latest': Message.objects.all()[Message.objects.all().count() -1]
         }
     )
 
@@ -50,6 +52,7 @@ def publish(request):
     """Renders the about page."""
     if request.method == "POST":        
         client.publish(request.POST['topic'],request.POST['message_string'])
+        time.sleep(2)
         return HttpResponseRedirect('/topics')
     
     else:
@@ -68,7 +71,9 @@ def on_connect(client, userdata, flags, rc):
 def on_message(client, userdata, msg):
     new_message = Message()
     new_message.topic = msg.topic
-    new_message.message_string = msg.payload
+    clean_msg = str(msg.payload)
+    clean_msg = clean_msg[2:-1]
+    new_message.message_string = clean_msg
     new_message.timestamp = datetime.now()
     new_message.save()
 
