@@ -12,7 +12,7 @@ from app.views import topic_list
 
 urlpatterns = [
     path('', views.home, name='home'),
-    path('topics/', topic_list.as_view(), name='topics'),
+    path('topics/', views.topic_list, name='topics'),
     path('publish/', views.publish, name='publish'),
     path('login/',
          LoginView.as_view

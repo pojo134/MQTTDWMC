@@ -18,7 +18,13 @@ class BootstrapAuthenticationForm(AuthenticationForm):
                                widget=forms.PasswordInput({
                                    'class': 'form-control',
                                    'placeholder':'Password'}))
-class NewMessageForm(ModelForm):
-    class Meta:
-        model = Message
-        fields = ['topic', 'message_string']
+
+class NewMessageForm(forms.Form):
+    topic = forms.CharField(max_length=50,
+                            widget=forms.TextInput({
+                                   'class': 'form-control',
+                                   'placeholder': 'Topic'}))
+    message_string = forms.CharField(max_length=100,
+                                     widget=forms.Textarea({
+                                   'class': 'form-control',
+                                   'placeholder': 'Message'}))

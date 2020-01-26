@@ -2,9 +2,16 @@
 
 {% block content %}
 <h2>Topics</h2>
-<ul>
-    {% for Message in object_list %}
-    <li>{{ Message.topic }} {{ Message.message_string }} {{ Message.timestamp }}</li>
-    {% endfor %}
-</ul>
+
+{% for topic in alltopics %}
+    <button class="btn btn-primary btn-lg btn-block" type="button" data-toggle="collapse" data-target="#{{ topic }}" aria-expanded="false" aria-controls="{{ topic }}">{{ topic }}</button>
+    <div class="collapse" id="{{ topic }}"></div>
+{% endfor %}
+
+<script type="text/javascript">  
+{% for message in objectlist %}
+document.getElementById("{{ message.topic }}").insertAdjacentHTML("afterbegin", "<div class='alert alert-warning' role='alert'>{{ message.message_string }} on {{ message.timestamp }}</div>");
+{% endfor %}
+</script>
+
 {% endblock %}
