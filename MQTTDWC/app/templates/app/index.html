@@ -1,0 +1,56 @@
+{% extends "app/layout.html" %}
+
+{% block content %}
+
+<div class="jumbotron">
+    <h1>MQTT</h1>
+    <p class="lead">Trying to make a web client!</p>
+</div>
+
+<div class="row">
+    <div class="col" id="top_entry">
+    </div>
+</div>
+
+<script>
+    // Create a client instance
+var client = new Paho.Client("broker.hivemq.com", Number(8000), "0x9930");
+
+// set callback handlers
+client.onConnectionLost = onConnectionLost;
+client.onMessageArrived = onMessageArrived;
+
+// connect the client
+client.connect({onSuccess:onConnect});
+
+
+// called when the client connects
+function onConnect() {
+  // Once a connection has been made, make a subscription and send a message.
+  console.log("onConnect");
+  client.subscribe("World");
+  message = new Paho.Message("Hello");
+  message.destinationName = "World";
+  client.send(message);
+    document.getElementById("top_entry").innerHTML = "<h2>Connected</h2>";
+}
+
+// called when the client loses its connection
+function onConnectionLost(responseObject) {
+  if (responseObject.errorCode !== 0) {
+      console.log("onConnectionLost:" + responseObject.errorMessage);
+      document.getElementById("top_entry").innerHTML = "<h2>Disconnected</h2>";
+  }
+}
+
+// called when a message arrives
+function onMessageArrived(message) {
+    console.log("onMessageArrived:" + message.payloadString);
+    var today = new Date();
+    var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+    var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+    var dateTime = date+' '+time;
+    document.getElementById("top_entry").innerHTML = '<div class="alert alert-info" role="alert">' + message.destinationName.toString() + " - " + message.payloadString + " on " + dateTime + "</div>";
+}
+</script>
+{% endblock %}
