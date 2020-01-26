@@ -4,7 +4,7 @@
 <h2>Topics</h2>
 <ul>
     {% for Message in object_list %}
-    <li>{{ Message.message_string }}</li>
+    <li>{{ Message.topic }} {{ Message.message_string }} {{ Message.timestamp }}</li>
     {% endfor %}
 </ul>
 {% endblock %}
